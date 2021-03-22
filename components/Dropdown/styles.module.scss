@@ -1,0 +1,39 @@
+@use '../../styles/base.scss' as b;
+
+.container {
+  position: relative;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 10%;
+
+  align-items: center;
+
+  cursor: pointer;
+
+  background-color: b.$input-bg;
+  border-radius: 0.875rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  min-width: 12.5rem;
+}
+
+.title {
+  margin: 0;
+
+  @include b.desktop-text-small;
+}
+
+.choicesContainer {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+
+  width: 100%;
+
+  background-color: b.$input-bg;
+  border-radius: 0.875rem;
+  border: none;
+  padding: 0.5rem 0;
+}

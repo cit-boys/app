@@ -1,0 +1,25 @@
+@use '../../../styles/base.scss' as b;
+
+.container {
+  list-style-type: none;
+  padding: 0.5rem 1rem;
+  color: #6e7191;
+
+  cursor: pointer;
+  transition: background-color 200ms ease, color 100ms ease;
+
+  &:hover {
+    background-color: #d9dbe9;
+    color: b.$black;
+  }
+}
+
+.label {
+  margin: 0;
+
+  @include b.desktop-text-small;
+}
+
+.active {
+  color: b.$black;
+}
