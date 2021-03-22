@@ -1,0 +1,8 @@
+@use '../styles/base.scss' as b;
+
+.main {
+  display: grid;
+  grid-template-rows: auto 1fr;
+
+  background-color: b.$bg-off-white;
+}
