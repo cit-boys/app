@@ -1,0 +1,47 @@
+@use '../../styles/base.scss' as b;
+
+.container {
+  height: 100vh;
+
+  display: grid;
+  grid-template-columns: 4.5rem auto;
+}
+
+.sidebar {
+  background-color: b.$black;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.logoContainer {
+  height: 5rem;
+  width: 4.5rem;
+
+  display: grid;
+  place-items: center;
+}
+
+.logo {
+  cursor: pointer;
+}
+
+.divider {
+  margin: 1rem 0;
+
+  height: 2px;
+  width: 100%;
+
+  background-color: #404040;
+}
+
+.mainLinks {
+  flex-grow: 1;
+}
+
+.avatarContainer {
+  padding: 1.5rem 0;
+
+  display: grid;
+  place-items: center;
+}

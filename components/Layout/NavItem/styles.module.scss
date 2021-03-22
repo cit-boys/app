@@ -1,0 +1,32 @@
+@use '../../../styles/base.scss' as b;
+
+.container {
+  padding: 1rem 0;
+  background-color: inherit;
+
+  cursor: pointer;
+
+  transition: background-color 200ms ease;
+
+  &:hover {
+    background-color: #333;
+  }
+}
+
+.iconContainer {
+  display: grid;
+  place-items: center;
+
+  position: relative;
+}
+
+.indicator {
+  height: 100%;
+  width: 0.2rem;
+
+  background: b.$primary-gradient;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
