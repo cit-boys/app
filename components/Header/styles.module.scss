@@ -1,0 +1,45 @@
+@use '../../styles/base.scss' as b;
+
+.container {
+  padding: 1.5rem 2.5rem;
+
+  display: flex;
+  align-items: center;
+}
+
+.headerTitle {
+  @include b.desktop-display-small;
+  color: white;
+  margin: 0;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin-bottom: 0.5rem;
+}
+
+.headerDetails {
+  z-index: 2;
+}
+
+.linkFontStyle {
+  color: white;
+
+  @include b.desktop-text-extrasmall;
+}
+
+.linkTitle {
+  composes: linkFontStyle;
+  transition: filter 200ms ease;
+
+  &:hover {
+    filter: brightness(90%);
+  }
+
+  &:last-child {
+    font-style: italic;
+  }
+}
