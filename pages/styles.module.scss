@@ -4,5 +4,7 @@
   display: grid;
   grid-template-rows: auto 1fr;
 
+  max-height: 100vh;
+
   background-color: b.$bg-off-white;
 }

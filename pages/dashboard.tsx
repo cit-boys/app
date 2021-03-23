@@ -36,6 +36,21 @@ export default function Directory(): React.ReactElement {
         >
           <SalaryInformation />
         </ContentCard>
+        <ContentCard
+          title="Contributions"
+          rightComponent={
+            <Dropdown
+              choices={[
+                { label: 'Alliance', value: 'alliance' },
+                { label: 'Rococo', value: 'rococo' },
+              ]}
+              selected={selected}
+              setSelected={setSelected}
+            />
+          }
+        >
+          <SalaryInformation />
+        </ContentCard>
       </div>
     </main>
   )

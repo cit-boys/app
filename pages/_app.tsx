@@ -13,7 +13,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <>
       <Head>
-        <title>{toTitleCase(router.pathname)} | MySalary.fyi</title>
+        <title>{toTitleCase(router.pathname || 'home')} | MySalary.fyi</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
