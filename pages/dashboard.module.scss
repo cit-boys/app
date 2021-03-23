@@ -2,7 +2,8 @@
 
 .content {
   display: grid;
-  place-items: center;
+  align-items: flex-start;
+  justify-items: center;
   row-gap: 10rem;
 
   overflow-y: auto;

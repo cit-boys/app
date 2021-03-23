@@ -36,7 +36,7 @@ export default function Directory(): React.ReactElement {
         >
           <SalaryInformation />
         </ContentCard>
-        <ContentCard
+        {/* <ContentCard
           title="Contributions"
           rightComponent={
             <Dropdown
@@ -50,7 +50,7 @@ export default function Directory(): React.ReactElement {
           }
         >
           <SalaryInformation />
-        </ContentCard>
+        </ContentCard> */}
       </div>
     </main>
   )
