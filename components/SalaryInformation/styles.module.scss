@@ -1,0 +1,83 @@
+@use '../../styles/base.scss' as b;
+
+.bar {
+  background: b.$primary-gradient;
+
+  width: 100%;
+  height: 1.5rem;
+  border-radius: 999px;
+
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.salaryRange {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 1rem;
+}
+
+.salaryDetailContainer {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    color: #4e4b66;
+    margin: 0;
+
+    @include b.desktop-link-small;
+  }
+
+  .salary {
+    margin: 0;
+    @include b.desktop-text-small;
+  }
+}
+
+.left {
+  align-items: flex-start;
+}
+
+.center {
+  align-items: center;
+}
+
+.right {
+  align-items: flex-end;
+}
+
+.barSection {
+  position: relative;
+  display: grid;
+  place-items: center;
+
+  .marker {
+    position: absolute;
+    bottom: 100%;
+
+    display: grid;
+    place-items: center;
+
+    cursor: pointer;
+
+    .needle {
+      width: 0.25rem;
+      height: 1rem;
+
+      background-color: b.$black;
+    }
+
+    .pinHead {
+      padding: 0.5rem 1rem;
+      background-color: b.$black;
+      border-radius: 999px;
+
+      white-space: nowrap;
+
+      .label {
+        @include b.desktop-text-extrasmall($weight: b.$semi-bold);
+        color: white;
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FiChevronDown } from 'react-icons/fi'
 
 import DropdownItem from './DropdownItem'
@@ -21,13 +21,21 @@ export default function Dropdown({
   setSelected,
 }: Props): React.ReactElement {
   const [show, setShow] = useState(false)
+  const ref = useRef<HTMLDivElement>()
 
   useEffect(() => {
     if (selected === undefined) setSelected(choices[0].value)
+
+    const handleClickOutside = (e: any) => {
+      if (ref.current && !ref.current.contains(e.target)) setShow(false)
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={ref}>
       <div className={styles.header} onClick={() => setShow(!show)}>
         <p className={styles.title}>
           {choices.find((item) => item.value === selected)?.label}
