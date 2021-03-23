@@ -35,8 +35,14 @@ export default function SalaryInformation(): React.ReactElement {
         style={{ gridTemplateColumns: barWidths.join(' ') }}
       >
         {data.levels.map((level, index) => (
-          <div key={index}>
-            <Bar label={level.label} key={index} even={!!(index % 2)} />
+          <div
+            key={index}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: index !== 0 ? 'auto 1fr' : '1fr',
+              justifyItems: 'center',
+            }}
+          >
             {index ? (
               <div
                 style={{
@@ -46,6 +52,7 @@ export default function SalaryInformation(): React.ReactElement {
                 }}
               />
             ) : null}
+            <Bar label={level.label} key={index} even={!!(index % 2)} />
           </div>
         ))}
       </div>
