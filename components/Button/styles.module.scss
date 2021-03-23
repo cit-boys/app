@@ -1,0 +1,15 @@
+@use '../../styles/base.scss' as b;
+
+.container {
+  background-image: b.$primary-gradient;
+  padding: 0.5rem 2rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.title {
+  color: white;
+  @include b.desktop-link-small;
+}
