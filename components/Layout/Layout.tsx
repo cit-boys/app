@@ -60,7 +60,7 @@ export default function Layout({ children }: Props): React.ReactElement {
             <NavItem
               key={index.toString()}
               {...item}
-              selected={router.pathname === item.link}
+              selected={router.pathname.startsWith(item.link)}
             />
           ))}
         </div>

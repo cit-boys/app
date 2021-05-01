@@ -8,7 +8,7 @@ import SalaryInformation from '@components/SalaryInformation'
 import { BsArrowRight } from 'react-icons/bs'
 
 import dashboard from './dashboard.module.scss'
-import styles from './styles.module.scss'
+import styles from '../styles.module.scss'
 import Button from '@components/Button'
 import ContributionCard from '@components/ContributionCard'
 
