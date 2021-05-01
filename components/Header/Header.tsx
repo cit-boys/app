@@ -1,8 +1,10 @@
 import HeaderBackground from '@components/HeaderBackground'
 import Link from 'next/link'
+import { styled } from '@stitches/react'
 
 import styles from './styles.module.scss'
 
+const Box = styled('div', {})
 interface Breadcrumb {
   title: string
   link: string
@@ -11,20 +13,22 @@ interface Breadcrumb {
 interface Props {
   title: string
   breadcrumbs?: Breadcrumb[]
+  rightComponent?: React.ReactNode
 }
 
 export default function Header({
   title,
   breadcrumbs,
+  rightComponent,
 }: Props): React.ReactElement {
   return (
     <HeaderBackground>
-      <div className={styles.container}>
-        <div className={styles.headerDetails}>
+      <Box className={styles.container + ' flex justify-between items-start'}>
+        <Box className={styles.headerDetails}>
           {breadcrumbs ? (
-            <div className={styles.breadcrumbs}>
+            <Box className={styles.breadcrumbs}>
               {breadcrumbs.map((item, index) => (
-                <div
+                <Box
                   key={index}
                   style={{ display: 'flex', flexDirection: 'row' }}
                 >
@@ -39,13 +43,14 @@ export default function Header({
                       /
                     </p>
                   ) : null}
-                </div>
+                </Box>
               ))}
-            </div>
+            </Box>
           ) : null}
           <h1 className={styles.headerTitle}>{title}</h1>
-        </div>
-      </div>
+        </Box>
+        {rightComponent}
+      </Box>
     </HeaderBackground>
   )
 }
