@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { AiOutlineHome } from 'react-icons/ai'
 import { MdSearch } from 'react-icons/md'
 import { RiDashboardLine } from 'react-icons/ri'
+import { AiOutlineDatabase } from 'react-icons/ai'
 
 import NavItem from './NavItem'
 import styles from './styles.module.scss'
@@ -18,6 +19,10 @@ const mainLinks: NavItemProps[] = [
   {
     link: '/dashboard',
     icon: <RiDashboardLine color="white" size={iconSize} />,
+  },
+  {
+    link: '/companies',
+    icon: <AiOutlineDatabase color="white" size={iconSize} />,
   },
 ]
 
