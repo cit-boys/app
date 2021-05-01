@@ -1,0 +1,12 @@
+@use '../../styles/base.scss' as b;
+
+.container {
+  list-style-type: none;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(229, 231, 235, 1);
+    color: b.$black;
+  }
+}
