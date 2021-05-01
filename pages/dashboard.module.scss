@@ -1,9 +1,11 @@
 @use '../styles/base.scss' as b;
 
 .content {
-  display: grid;
-  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-items: center;
+
   row-gap: 8rem;
 
   overflow-y: auto;
