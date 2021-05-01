@@ -3,7 +3,6 @@ import Header from '@components/Header'
 import SearchInput from '@components/SearchInput'
 import Head from 'next/head'
 // import { useRouter } from 'next/router'
-import React, { ReactElement } from 'react'
 import styles from '../styles.module.scss'
 import { styled } from '@stitches/react'
 import { GetServerSidePropsContext } from 'next'
@@ -90,7 +89,7 @@ export default function CompanyDetail({
 }: {
   errorCode: number
   companyName: string
-}): ReactElement {
+}): React.ReactNode {
   // const { query } = useRouter()
 
   if (errorCode === 404) return <Error statusCode={errorCode} />
@@ -102,7 +101,7 @@ export default function CompanyDetail({
       </Head>
       <main className={styles.main}>
         <Header
-          title="Directory"
+          title={toTitleCase(companyName)}
           breadcrumbs={[
             { title: 'Home', link: '/home' },
             { title: 'Directory', link: '/companies' },
