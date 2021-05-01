@@ -43,17 +43,19 @@ function CompaniesList({
       <Box className="flex flex-wrap gap-4">
         {companies.map((item, index) => (
           <Link href={`/companies/${item.toLocaleLowerCase()}`} key={index}>
-            <Box
-              css={{ backgroundColor: '#F3EFFF', width: 'fit-content' }}
-              className="flex items-center justify-center py-3 px-4 rounded-lg cursor-pointer filter hover:brightness-95"
-            >
-              <CompanyName
-                className="font-semibold"
-                css={{ color: '#5F2EEA95' }}
+            <a>
+              <Box
+                css={{ backgroundColor: '#F3EFFF', width: 'fit-content' }}
+                className="flex items-center justify-center py-3 px-4 rounded-lg cursor-pointer filter hover:brightness-95"
               >
-                {item}
-              </CompanyName>
-            </Box>
+                <CompanyName
+                  className="font-semibold"
+                  css={{ color: '#5F2EEA95' }}
+                >
+                  {item}
+                </CompanyName>
+              </Box>
+            </a>
           </Link>
         ))}
       </Box>

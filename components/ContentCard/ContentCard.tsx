@@ -3,7 +3,7 @@ import styles from './styles.module.scss'
 interface Props {
   title: string
   subtitle?: string
-  rightComponent: React.ReactElement
+  rightComponent?: React.ReactNode
   children: React.ReactElement
 }
 

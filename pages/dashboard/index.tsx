@@ -56,14 +56,16 @@ export default function Directory(): React.ReactElement {
               <Button
                 classNames={[dashboard.contributeButton]}
                 title={
-                  <div className={dashboard.titleContainer}>
-                    <span className={dashboard.contributeButton__title}>
-                      Contribute
-                    </span>
-                    <div className={dashboard.right}>
-                      <BsArrowRight color="white" size={24} />
+                  (
+                    <div className={dashboard.titleContainer}>
+                      <span className={dashboard.contributeButton__title}>
+                        Contribute
+                      </span>
+                      <div className={dashboard.right}>
+                        <BsArrowRight color="white" size={24} />
+                      </div>
                     </div>
-                  </div>
+                  ) as any
                 }
               />
             }

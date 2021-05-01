@@ -3,12 +3,13 @@ import Header from '@components/Header'
 import SearchInput from '@components/SearchInput'
 import Head from 'next/head'
 // import { useRouter } from 'next/router'
-import styles from '../styles.module.scss'
 import { styled } from '@stitches/react'
 import { GetServerSidePropsContext } from 'next'
 import Error from 'next/error'
 import { BsArrowRight } from 'react-icons/bs'
 import { AiOutlineTag } from 'react-icons/ai'
+
+import styles from '../styles.module.scss'
 
 const toTitleCase = (str: string) => `${str[0].toUpperCase()}${str.slice(1)}`
 const Box = styled('div', {})

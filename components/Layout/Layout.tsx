@@ -6,6 +6,8 @@ import { MdSearch } from 'react-icons/md'
 import { RiDashboardLine } from 'react-icons/ri'
 import { AiOutlineDatabase } from 'react-icons/ai'
 
+import { IoMdAddCircleOutline } from 'react-icons/io'
+
 import NavItem from './NavItem'
 import styles from './styles.module.scss'
 
@@ -53,6 +55,11 @@ export default function Layout({ children }: Props): React.ReactElement {
           selected={router.pathname === '/search'}
           icon={<MdSearch color="white" size={iconSize} />}
           link="/search"
+        />
+        <NavItem
+          selected={router.pathname === '/contribute'}
+          icon={<IoMdAddCircleOutline color="white" size={iconSize} />}
+          link="/contribute"
         />
         <div className={styles.divider} />
         <div className={styles.mainLinks}>
