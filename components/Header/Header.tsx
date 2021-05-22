@@ -24,7 +24,7 @@ export default function Header({
   return (
     <HeaderBackground>
       <Box className={styles.container + ' flex justify-between items-start'}>
-        <Box className={styles.headerDetails}>
+        <Box>
           {breadcrumbs ? (
             <Box className={styles.breadcrumbs}>
               {breadcrumbs.map((item, index) => (
