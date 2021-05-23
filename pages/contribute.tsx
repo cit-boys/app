@@ -6,7 +6,7 @@ import { Form, Formik } from 'formik'
 import { useMutation } from 'react-query'
 
 import axios from '@utils/axios'
-import { Company, getCompanies } from '@utils/hooks/useCompanies'
+import { getCompanies } from '@utils/hooks/useCompanies'
 
 import Header from '@components/Header'
 import ContentCard from '@components/ContentCard'
@@ -60,6 +60,8 @@ export default function Contribute({
     }
   )
 
+  const mapChoices = (item: Level) => ({ label: item.name, value: item.id })
+
   return (
     <>
       <Head>
@@ -99,9 +101,9 @@ export default function Contribute({
                 <Form onSubmit={handleSubmit}>
                   <Box className="grid grid-cols-2 gap-x-16 gap-y-4">
                     <DropdownV2
-                      choices={companies.map((item) => ({
-                        label: item.short_name,
-                        value: item.id,
+                      choices={companies.map((item, index) => ({
+                        label: index ? item.short_name : 'All',
+                        value: index ? item.id : '',
                       }))}
                       value={values.company_name}
                       onChange={(v) => setFieldValue('company_name', v)}
@@ -115,12 +117,26 @@ export default function Contribute({
                       placeholder="Job Title"
                     />
                     <DropdownV2
-                      choices={levels.map((item) => ({
-                        label: item.name,
-                        value: item.id,
-                      }))}
+                      choices={
+                        values.company_name
+                          ? levels
+                              .filter(
+                                (item) => item.company === values.company_name
+                              )
+                              .map(mapChoices)
+                          : levels.map(mapChoices)
+                      }
                       value={values.level}
-                      onChange={(v) => setFieldValue('level', v)}
+                      onChange={(v) => {
+                        // current solution looks like it handles the test case: changing the company if the current level is on a different company
+                        // but values.level persists even if the ui looks like it set the field to undefined
+                        if (!values.company_name)
+                          setFieldValue(
+                            'company_name',
+                            levels.find((item) => item.company === v).company
+                          )
+                        setFieldValue('level', v)
+                      }}
                       placeholder="Level"
                     />
                     <Box className="grid gap-x-4 grid-cols-2">
@@ -163,7 +179,7 @@ export default function Contribute({
                       ]}
                       value={values.highestEd}
                       onChange={(v) => setFieldValue('highestEd', v)}
-                      placeholder="Level"
+                      placeholder="Highest Education Attained"
                     />
                     <FormControl component="fieldset">
                       <FormLabel
@@ -217,7 +233,7 @@ export interface Level {
   id: number
   name: string
   order: number
-  company: Company
+  company: number
 }
 
 // eslint-disable-next-line
@@ -227,6 +243,8 @@ export async function getStaticProps() {
     const levels = await axios
       .get<Level[]>('api/levels/')
       .then((res) => res.data || [])
+
+    companies.unshift({ id: 0, location: '', name: '', short_name: '' })
 
     return {
       props: { companies, levels },
