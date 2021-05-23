@@ -1,31 +1,34 @@
+import { useSalaryInfo } from '@utils/hooks'
+import { useEffect } from 'react'
 import Bar from './Bar'
 import SalaryDetail from './SalaryDetail'
 import styles from './styles.module.scss'
 
-interface Level {
-  label: string
-  contributions: number
+interface Props {
+  company: number
 }
 
-interface Data {
-  totalContributions: number
-  levels: Level[]
-}
+export default function SalaryInformation(params: Props): React.ReactElement {
+  const {
+    data: { max, min, info, median },
+    isLoading,
+    refetch,
+  } = useSalaryInfo({ params })
 
-const data: Data = {
-  totalContributions: 200,
-  levels: [
-    { label: 'SWE I', contributions: 80 },
-    { label: 'SWE II', contributions: 50 },
-    { label: 'SWE III', contributions: 45 },
-    { label: 'SWE IV', contributions: 25 },
-  ],
-}
+  useEffect(() => {
+    refetch()
+  }, [params.company])
 
-export default function SalaryInformation(): React.ReactElement {
-  const barWidths = data.levels.map(
+  if (isLoading) return null
+
+  const totalContributions = info.reduce(
+    (acc, item) => acc + item.contributions,
+    0
+  )
+
+  const barWidths = info.map(
     (level) =>
-      ((level.contributions / data.totalContributions) * 100).toString() + 'fr'
+      ((level.contributions / totalContributions) * 100).toString() + 'fr'
   )
 
   return (
@@ -34,7 +37,7 @@ export default function SalaryInformation(): React.ReactElement {
         className={styles.bar}
         style={{ gridTemplateColumns: barWidths.join(' ') }}
       >
-        {data.levels.map((level, index) => (
+        {info.map((level, index) => (
           <div
             key={index}
             style={{
@@ -52,14 +55,14 @@ export default function SalaryInformation(): React.ReactElement {
                 }}
               />
             ) : null}
-            <Bar label={level.label} key={index} even={!!(index % 2)} />
+            <Bar label={level.level} key={index} even={!!(index % 2)} />
           </div>
         ))}
       </div>
       <div className={styles.salaryRange}>
-        <SalaryDetail position="left" salary="16,000" />
-        <SalaryDetail position="center" salary="16,000" />
-        <SalaryDetail position="right" salary="16,000" />
+        <SalaryDetail position="left" salary={min} />
+        <SalaryDetail position="center" salary={median} />
+        <SalaryDetail position="right" salary={max} />
       </div>
     </div>
   )

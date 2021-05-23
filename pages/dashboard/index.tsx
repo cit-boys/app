@@ -29,7 +29,6 @@ export default function Directory({
   const [selectedCompanySalary, setSelectedCompanySalary] = useState<
     number | string
   >()
-  const [selectedJobSalary, setSelectedJobSalary] = useState<string>()
   const [selectedJob, setSelectedJob] = useState<string>()
   const [selectedCompany, setSelectedCompany] = useState<number | string>()
 
@@ -79,16 +78,7 @@ export default function Directory({
             title="Salary Information"
             subtitle="Software Engineer"
             rightComponent={
-              <div className="grid grid-cols-2 gap-8 w-[32rem]">
-                <DropdownV2
-                  value={selectedJobSalary}
-                  onChange={setSelectedJobSalary}
-                  choices={jobs.map((item) => ({
-                    label: item || 'All',
-                    value: item,
-                  }))}
-                  placeholder="Filter by Job"
-                />
+              <div className="w-[15rem]">
                 <DropdownV2
                   value={selectedCompanySalary}
                   onChange={setSelectedCompanySalary}
@@ -98,7 +88,7 @@ export default function Directory({
               </div>
             }
           >
-            <SalaryInformation />
+            <SalaryInformation company={selectedCompanySalary as number} />
           </ContentCard>
           <ContentCard
             title="Contributions"

@@ -14,7 +14,7 @@ interface SalaryInfo {
     level: string
     salary: number
     bonus: number
-    contribution: number
+    contributions: number
   }>
 }
 
@@ -23,13 +23,14 @@ const getSalaryInfo = (params: Params = {}) =>
     .get('api/contributions/salaryinfo/', { params })
     .then((res) => res.data)
     .then((data) => ({
+      ...data,
       min: parseFloat(data.min),
       max: parseFloat(data.max),
       median: parseFloat(data.median),
-      info: data.map((item) => ({
+      info: data.info.map((item) => ({
         ...item,
-        salary: parseFloat(data.salary),
-        bonus: parseFloat(data.bonus),
+        salary: parseFloat(item.salary),
+        bonus: parseFloat(item.bonus),
       })),
     }))
 
@@ -40,9 +41,13 @@ interface Props {
 
 // eslint-disable-next-line
 export default function useSalaryInfo({ params = {}, options }: Props = {}) {
-  return useQuery<SalaryInfo>(
-    'contributions',
-    () => getSalaryInfo(params),
-    options
-  )
+  return useQuery<SalaryInfo>('salaryinfo', () => getSalaryInfo(params), {
+    initialData: {
+      info: [{ bonus: 0, contributions: 2, level: '', salary: 0 }],
+      max: 0,
+      median: 0,
+      min: 0,
+    },
+    ...options,
+  })
 }

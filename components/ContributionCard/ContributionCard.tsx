@@ -26,7 +26,7 @@ export default function ContributionCard({
         submitted {formatDistanceToNow(dateContributed, { addSuffix: true })}
       </span>
       <span className={styles.salary}>
-        {new Intl.NumberFormat('en-IN', {
+        {new Intl.NumberFormat('en', {
           style: 'currency',
           currency: 'PHP',
         }).format(salary)}
