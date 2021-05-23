@@ -1,3 +1,4 @@
+import { InferGetServerSidePropsType } from 'next'
 import ContentCard from '@components/ContentCard'
 import Header from '@components/Header'
 import SearchInput from '@components/SearchInput'
@@ -85,12 +86,9 @@ function JobTitleCard({
 }
 
 export default function CompanyDetail({
-  errorCode,
   companyName,
-}: {
-  errorCode: number
-  companyName: string
-}): React.ReactNode {
+  errorCode,
+}: InferGetServerSidePropsType<typeof getServerSideProps>): React.ReactNode {
   // const { query } = useRouter()
 
   if (errorCode === 404) return <Error statusCode={errorCode} />
@@ -145,9 +143,8 @@ export default function CompanyDetail({
   )
 }
 
-export async function getServerSideProps({
-  query,
-}: GetServerSidePropsContext): Promise<{ [key: string]: any }> {
+// eslint-disable-next-line
+export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   // call api get data
   let errorCode = 404
 

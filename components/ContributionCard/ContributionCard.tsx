@@ -1,17 +1,16 @@
-import Image from 'next/image'
+import { formatDistanceToNow } from 'date-fns'
 import styles from './styles.module.scss'
+import { motion } from 'framer-motion'
 
 interface Props {
-  name: string
   companyName: string
   yoe: number
   job: string
-  dateContributed: string
-  salary: string
+  dateContributed: Date
+  salary: number
 }
 
 export default function ContributionCard({
-  name,
   companyName,
   yoe,
   dateContributed,
@@ -19,23 +18,19 @@ export default function ContributionCard({
   salary,
 }: Props): React.ReactElement {
   return (
-    <div className={styles.container}>
-      <div className={styles.userDetails}>
-        <Image
-          src="/avatar.png"
-          width={32}
-          height={32}
-          className={styles.avatar}
-        />
-        <span className={styles.name}>{name}</span>
-      </div>
-      <div className={styles.grid}>
-        <span className={styles.company}>{companyName}</span>
-        <span className={styles.yoe}>{yoe} YOE</span>
-        <span className={styles.job}>{job}</span>
-        <span className={styles.dateContributed}>{dateContributed}</span>
-        <span className={styles.salary}>{salary}</span>
-      </div>
-    </div>
+    <motion.div className={styles.container} whileHover={{ y: -5 }}>
+      <span className={styles.name}>{companyName}</span>
+      <span className={styles.yoe}>{yoe} YOE</span>
+      <span className={styles.job}>{job}</span>
+      <span className={styles.dateContributed}>
+        submitted {formatDistanceToNow(dateContributed, { addSuffix: true })}
+      </span>
+      <span className={styles.salary}>
+        {new Intl.NumberFormat('en-IN', {
+          style: 'currency',
+          currency: 'PHP',
+        }).format(salary)}
+      </span>
+    </motion.div>
   )
 }

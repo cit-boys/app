@@ -1,28 +1,23 @@
 @use '../../styles/base.scss' as b;
 
 .container {
+  min-width: 16rem;
   border-radius: 1.5rem;
   border: 2px b.$black solid;
   padding: 1rem 1.5rem;
-}
-
-.grid {
   display: grid;
   grid-template-areas:
-    'user-details .'
-    'company yoe'
-    'job date-contributed'
-    '. salary';
-  grid-template-columns: auto auto;
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
+    'user-details'
+    'job'
+    'yoe'
+    'salary'
+    'date-contributed';
+  grid-template-columns: auto;
 }
 
 .name {
-  @include b.desktop-text-small($weight: b.$medium);
+  @include b.desktop-text-small($weight: b.$semi-bold);
+  margin-bottom: 1rem;
 }
 
 .userDetails {
@@ -34,35 +29,25 @@
   margin-bottom: 1rem;
 }
 
-.company {
-  grid-area: company;
-
-  @include b.desktop-text-small($weight: b.$medium);
-}
-
 .yoe {
   grid-area: yoe;
 
   @include b.desktop-text-small($weight: b.$medium);
-  place-self: flex-end;
 }
 
 .job {
   grid-area: job;
-  @include b.desktop-text-small($size: 0.75rem);
+  @include b.desktop-text-small;
 }
 
 .dateContributed {
   grid-area: date-contributed;
   @include b.desktop-text-small($size: 0.75rem);
-  place-self: flex-end;
+  margin-top: 1rem;
 }
 
 .salary {
   grid-area: salary;
-  place-self: flex-end;
-
-  margin-top: 1rem;
 
   @include b.desktop-link-medium;
 }

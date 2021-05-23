@@ -6,6 +6,7 @@ import { styled } from '@stitches/react'
 
 import styles from '../styles.module.scss'
 import Link from 'next/link'
+import { Company, getCompanies } from '@utils/hooks/useCompanies'
 
 const Box = styled('div', {})
 const Title = styled('h3', {})
@@ -63,7 +64,11 @@ function CompaniesList({
   )
 }
 
-export default function Companies(): React.ReactElement {
+export default function Companies({
+  companies,
+}: {
+  companies: Company[]
+}): React.ReactElement {
   return (
     <>
       <Head>
@@ -84,7 +89,10 @@ export default function Companies(): React.ReactElement {
         >
           <ContentCard title="Companies" rightComponent={<SearchInput />}>
             <Box className="flex flex-col gap-y-8">
-              <CompaniesList title="Popular Companies" companies={d} />
+              <CompaniesList
+                title="Popular Companies"
+                companies={companies.map((item) => item.short_name)}
+              />
               <CompaniesList title="All Companies" companies={d} />
             </Box>
           </ContentCard>
@@ -92,4 +100,19 @@ export default function Companies(): React.ReactElement {
       </main>
     </>
   )
+}
+
+// eslint-disable-next-line
+export async function getServerSideProps() {
+  try {
+    const companies = await getCompanies()
+
+    return {
+      props: { companies },
+    }
+  } catch (error) {
+    return {
+      props: { companies: [] },
+    }
+  }
 }

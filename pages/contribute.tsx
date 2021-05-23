@@ -1,6 +1,12 @@
+import { InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { styled } from '@stitches/react'
 import { Form, Formik } from 'formik'
+import { useMutation } from 'react-query'
+
+import axios from '@utils/axios'
+import { Company, getCompanies } from '@utils/hooks/useCompanies'
 
 import Header from '@components/Header'
 import ContentCard from '@components/ContentCard'
@@ -20,30 +26,40 @@ import Button from '@components/Button'
 const Box = styled('div', {})
 
 interface InitialValues {
-  company_name: number | null
-  level: number | null
-  gender: string | null
+  company_name?: number
+  level?: number
+  gender: string
   highestEd: string
   job_title: string
-  yoe: number | null
-  yac: number | null
+  yoe?: number
+  yac?: number
   annual_salary: string
   bonus: string
 }
 
 const initialValues: InitialValues = {
-  company_name: null,
-  level: null,
-  gender: null,
+  company_name: undefined,
+  level: undefined,
+  gender: undefined,
   highestEd: '',
   job_title: '',
-  yoe: null,
-  yac: null,
   annual_salary: '',
   bonus: '',
 }
 
-export default function contribute(): React.ReactNode {
+export default function Contribute({
+  companies,
+  levels,
+}: InferGetStaticPropsType<typeof getStaticProps>): React.ReactNode {
+  const router = useRouter()
+  const { mutate } = useMutation(
+    (values: any) => axios.post('api/contributions/', values),
+    {
+      onSuccess: () => router.push('dashboard'),
+      onError: (err: any) => console.error(err?.response.data),
+    }
+  )
+
   return (
     <>
       <Head>
@@ -65,18 +81,28 @@ export default function contribute(): React.ReactNode {
           <ContentCard title="Add a Salary">
             <Formik
               initialValues={initialValues}
-              onSubmit={() => {
-                'asdf'
+              onSubmit={(values) => {
+                mutate({
+                  bonus: parseFloat(values.bonus.replaceAll(',', '')),
+                  salary: parseFloat(values.annual_salary.replaceAll(',', '')),
+                  years_of_experience: values.yoe,
+                  years_at_company: values.yac,
+                  highest_academic_level_attained: values.highestEd,
+                  company_id: values.company_name,
+                  gender: values.gender,
+                  job_title: values.job_title,
+                  level: values.level,
+                })
               }}
             >
               {({ values, setFieldValue, handleChange, handleSubmit }) => (
                 <Form onSubmit={handleSubmit}>
                   <Box className="grid grid-cols-2 gap-x-16 gap-y-4">
                     <DropdownV2
-                      choices={[
-                        { label: 'Rococo', value: 1 },
-                        { label: 'Alliance', value: 2 },
-                      ]}
+                      choices={companies.map((item) => ({
+                        label: item.short_name,
+                        value: item.id,
+                      }))}
                       value={values.company_name}
                       onChange={(v) => setFieldValue('company_name', v)}
                       placeholder="Company Name"
@@ -89,10 +115,10 @@ export default function contribute(): React.ReactNode {
                       placeholder="Job Title"
                     />
                     <DropdownV2
-                      choices={[
-                        { label: 'SWE I', value: 1 },
-                        { label: 'SWE II', value: 2 },
-                      ]}
+                      choices={levels.map((item) => ({
+                        label: item.name,
+                        value: item.id,
+                      }))}
                       value={values.level}
                       onChange={(v) => setFieldValue('level', v)}
                       placeholder="Level"
@@ -103,12 +129,14 @@ export default function contribute(): React.ReactNode {
                         value={values.yoe}
                         onChange={handleChange}
                         placeholder="Years of Experience"
+                        type="number"
                       />
                       <FormInput
                         name="yac"
                         value={values.yac}
                         onChange={handleChange}
                         placeholder="Years at Company"
+                        type="number"
                       />
                     </Box>
                     <FormInput
@@ -183,4 +211,29 @@ export default function contribute(): React.ReactNode {
       </main>
     </>
   )
+}
+
+export interface Level {
+  id: number
+  name: string
+  order: number
+  company: Company
+}
+
+// eslint-disable-next-line
+export async function getStaticProps() {
+  try {
+    const companies = await getCompanies()
+    const levels = await axios
+      .get<Level[]>('api/levels/')
+      .then((res) => res.data || [])
+
+    return {
+      props: { companies, levels },
+    }
+  } catch (error) {
+    return {
+      props: { companies: [], levels: [] },
+    }
+  }
 }

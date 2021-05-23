@@ -1,24 +1,65 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { InferGetServerSidePropsType } from 'next'
+import { BsArrowRight } from 'react-icons/bs'
+import Loader from 'react-loader-spinner'
+
+import axios from '@utils/axios'
+import { useContributions } from '@utils/hooks'
+import { getCompanies } from '@utils/hooks/useCompanies'
+import Button from '@components/Button'
 import ContentCard from '@components/ContentCard'
-import Dropdown from '@components/Dropdown'
+import ContributionCard from '@components/ContributionCard'
+import DropdownV2 from '@components/DropdownV2'
 import Header from '@components/Header'
 import SalaryInformation from '@components/SalaryInformation'
-import { BsArrowRight } from 'react-icons/bs'
 
-import dashboard from './dashboard.module.scss'
 import styles from '../styles.module.scss'
-import Button from '@components/Button'
-import ContributionCard from '@components/ContributionCard'
+import dashboard from './dashboard.module.scss'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 const toTitleCase = (str: string) => `${str[1].toUpperCase()}${str.slice(2)}`
 
-export default function Directory(): React.ReactElement {
+export default function Directory({
+  companies,
+  jobs,
+}: InferGetServerSidePropsType<typeof getStaticProps>): React.ReactElement {
   const router = useRouter()
-  const [selected, setSelected] = useState<string>()
+  const [selectedCompanySalary, setSelectedCompanySalary] = useState<
+    number | string
+  >()
+  const [selectedJobSalary, setSelectedJobSalary] = useState<string>()
   const [selectedJob, setSelectedJob] = useState<string>()
-  const [selectedCompany, setSelectedCompany] = useState<string>()
+  const [selectedCompany, setSelectedCompany] = useState<number | string>()
+
+  const { data: contributions, refetch, isLoading } = useContributions({
+    params: { company: selectedCompany as number, job_title: selectedJob },
+  })
+
+  useEffect(() => {
+    refetch()
+  }, [selectedCompany, selectedJob])
+
+  const companiesChoices = companies.map((item, index) => ({
+    label: index ? item.short_name : 'All',
+    value: index ? item.id : '',
+  }))
+
+  const renderContributions = contributions.length ? (
+    contributions.map((item, index) => (
+      <ContributionCard
+        key={index}
+        companyName={item.company_name}
+        yoe={item.years_of_experience}
+        dateContributed={item.datetime_of_contribution}
+        job={item.job_title}
+        salary={item.salary}
+      />
+    ))
+  ) : (
+    <span>There are currently no contributions.</span>
+  )
 
   return (
     <>
@@ -38,14 +79,23 @@ export default function Directory(): React.ReactElement {
             title="Salary Information"
             subtitle="Software Engineer"
             rightComponent={
-              <Dropdown
-                choices={[
-                  { label: 'Alliance', value: 'alliance' },
-                  { label: 'Rococo', value: 'rococo' },
-                ]}
-                selected={selected}
-                setSelected={setSelected}
-              />
+              <div className="grid grid-cols-2 gap-8 w-[32rem]">
+                <DropdownV2
+                  value={selectedJobSalary}
+                  onChange={setSelectedJobSalary}
+                  choices={jobs.map((item) => ({
+                    label: item || 'All',
+                    value: item,
+                  }))}
+                  placeholder="Filter by Job"
+                />
+                <DropdownV2
+                  value={selectedCompanySalary}
+                  onChange={setSelectedCompanySalary}
+                  choices={companiesChoices}
+                  placeholder="Filter by Company"
+                />
+              </div>
             }
           >
             <SalaryInformation />
@@ -67,6 +117,7 @@ export default function Directory(): React.ReactElement {
                     </div>
                   ) as any
                 }
+                onClick={() => router.push('contribute')}
               />
             }
           >
@@ -76,64 +127,36 @@ export default function Directory(): React.ReactElement {
                   Filters:
                 </span>
                 <div className={dashboard.filterButtonsContainer}>
-                  <Dropdown
-                    selected={selectedJob}
-                    setSelected={setSelectedJob}
-                    choices={[
-                      { label: 'Software Engineer', value: '1' },
-                      { label: 'Project Manager', value: '2' },
-                      { label: 'Scrum Master', value: '3' },
-                    ]}
+                  <DropdownV2
+                    value={selectedJob}
+                    onChange={setSelectedJob}
+                    choices={jobs.map((item) => ({
+                      label: item || 'All',
+                      value: item,
+                    }))}
+                    placeholder="Filter by Job"
                   />
-                  <Dropdown
-                    selected={selectedCompany}
-                    setSelected={setSelectedCompany}
-                    choices={[
-                      { label: 'Alliance', value: '1' },
-                      { label: 'Rococo', value: '2' },
-                    ]}
+                  <DropdownV2
+                    value={selectedCompany}
+                    onChange={setSelectedCompany}
+                    choices={companiesChoices}
+                    placeholder="Filter by Company"
                   />
                 </div>
               </div>
-              <div
-                style={{
-                  display: 'grid',
-                  columnGap: '1rem',
-                  gridTemplateColumns: 'repeat(4, 1fr)',
-                }}
-              >
-                <ContributionCard
-                  name="Jane Doe"
-                  companyName="Alliance"
-                  yoe={4}
-                  job="Software Engineer I"
-                  dateContributed="2 hours ago"
-                  salary="P27,000"
-                />
-                <ContributionCard
-                  name="John Doe"
-                  companyName="Alliance"
-                  yoe={6}
-                  job="Software Engineer I"
-                  dateContributed="3 hours ago"
-                  salary="P29,000"
-                />
-                <ContributionCard
-                  name="Andres Bonifacio"
-                  companyName="Alliance"
-                  yoe={7}
-                  job="Software Engineer I"
-                  dateContributed="5 hours ago"
-                  salary="P31,000"
-                />
-                <ContributionCard
-                  name="Jose Rizal"
-                  companyName="Alliance"
-                  yoe={7}
-                  job="Software Engineer II"
-                  dateContributed="5 hours ago"
-                  salary="P34,000"
-                />
+              <div className="flex gap-4">
+                {isLoading ? (
+                  <div className="w-full flex items-center justify-center">
+                    <Loader
+                      type="TailSpin"
+                      color="#00BFFF"
+                      height={40}
+                      width={40}
+                    />
+                  </div>
+                ) : (
+                  renderContributions
+                )}
               </div>
             </div>
           </ContentCard>
@@ -141,4 +164,25 @@ export default function Directory(): React.ReactElement {
       </main>
     </>
   )
+}
+
+// eslint-disable-next-line
+export async function getStaticProps() {
+  try {
+    const companies = await getCompanies()
+    const jobs = await axios
+      .get<string[]>('api/jobs/')
+      .then((res) => res.data || [])
+
+    companies.unshift({ id: 0, location: '', name: '', short_name: '' })
+    jobs.unshift('')
+
+    return {
+      props: { companies, jobs },
+    }
+  } catch (error) {
+    return {
+      props: { companies: [], jobs: [] },
+    }
+  }
 }
