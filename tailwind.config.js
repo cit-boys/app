@@ -1,5 +1,6 @@
 module.exports = {
-  purge: [],
+  mode: 'jit',
+  purge: ['./pages/**/*.{tsx,ts}', './components/**/*.{tsx,ts}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
@@ -9,5 +10,5 @@ module.exports = {
       brightness: ['hover', 'focus'],
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/jit')],
 }
