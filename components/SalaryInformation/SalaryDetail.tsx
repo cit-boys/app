@@ -4,7 +4,7 @@ import styles from './styles.module.scss'
 type Position = 'left' | 'center' | 'right'
 interface Props {
   position: Position
-  salary: string
+  salary: number
 }
 
 const determineTitle = (pos: Position) => {
@@ -26,7 +26,12 @@ export default function SalaryDetail({
       })}
     >
       <h6 className={styles.title}>{determineTitle(position)}</h6>
-      <p className={styles.salary}>₱{salary}</p>
+      <span className={styles.salary}>
+        {new Intl.NumberFormat('en', {
+          style: 'currency',
+          currency: 'PHP',
+        }).format(salary)}
+      </span>
     </div>
   )
 }

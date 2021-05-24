@@ -81,3 +81,14 @@
     }
   }
 }
+
+.jobTitle {
+  @include b.desktop-display-medium;
+}
+.companyName {
+  @include b.desktop-text-small;
+}
+.subtitle {
+  color: #767070;
+  @include b.desktop-text-medium;
+}

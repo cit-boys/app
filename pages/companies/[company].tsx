@@ -1,16 +1,17 @@
+import { InferGetServerSidePropsType } from 'next'
 import ContentCard from '@components/ContentCard'
 import Header from '@components/Header'
 import SearchInput from '@components/SearchInput'
 import Head from 'next/head'
 // import { useRouter } from 'next/router'
-import React, { ReactElement } from 'react'
-import styles from '../styles.module.scss'
 import { styled } from '@stitches/react'
 import { GetServerSidePropsContext } from 'next'
 import Error from 'next/error'
 import { BsArrowRight } from 'react-icons/bs'
-
 import { AiOutlineTag } from 'react-icons/ai'
+
+import styles from '../styles.module.scss'
+
 const toTitleCase = (str: string) => `${str[0].toUpperCase()}${str.slice(1)}`
 const Box = styled('div', {})
 const Text = styled('h3', {})
@@ -85,12 +86,9 @@ function JobTitleCard({
 }
 
 export default function CompanyDetail({
-  errorCode,
   companyName,
-}: {
-  errorCode: number
-  companyName: string
-}): ReactElement {
+  errorCode,
+}: InferGetServerSidePropsType<typeof getServerSideProps>): React.ReactNode {
   // const { query } = useRouter()
 
   if (errorCode === 404) return <Error statusCode={errorCode} />
@@ -98,17 +96,17 @@ export default function CompanyDetail({
   return (
     <>
       <Head>
-        <title>Rococo | MySalary.fyi</title>
+        <title>{companyName} | MySalary.fyi</title>
       </Head>
       <main className={styles.main}>
         <Header
-          title="Directory"
+          title={companyName}
           breadcrumbs={[
             { title: 'Home', link: '/home' },
             { title: 'Directory', link: '/companies' },
             {
-              title: toTitleCase(companyName),
-              link: `/companies/${companyName}`,
+              title: companyName,
+              link: `/companies/${companyName.toLowerCase()}`,
             },
           ]}
           rightComponent={
@@ -126,7 +124,7 @@ export default function CompanyDetail({
           css={{ padding: '5% 0' }}
         >
           <ContentCard
-            title={`Compensation at ${toTitleCase(companyName)}`}
+            title={`Compensation at ${companyName}`}
             rightComponent={<SearchInput />}
           >
             <Box className="flex flex-col gap-y-8">
@@ -145,13 +143,14 @@ export default function CompanyDetail({
   )
 }
 
-export async function getServerSideProps({
-  query,
-}: GetServerSidePropsContext): Promise<{ [key: string]: any }> {
+// eslint-disable-next-line
+export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   // call api get data
-  let errorCode = 200
+  let errorCode = 404
 
-  if (d1.some((item) => query.company === item)) errorCode = 404
+  if (d1.some((item) => query.company === item.toLowerCase())) errorCode = 200
 
-  return { props: { errorCode, companyName: query.company } }
+  return {
+    props: { errorCode, companyName: toTitleCase(query.company as string) },
+  }
 }
