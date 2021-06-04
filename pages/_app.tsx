@@ -9,14 +9,18 @@ import '../styles/global.scss'
 
 const queryClient = new QueryClient()
 
-export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+export default function MyApp({
+  Component,
+  pageProps,
+  router,
+}: AppProps): JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <Component {...pageProps} />
+        <Component {...pageProps} router={router} />
       </Layout>
     </QueryClientProvider>
   )
