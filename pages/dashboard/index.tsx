@@ -28,7 +28,7 @@ export default function Directory({
   const router = useRouter()
   const [selectedCompanySalary, setSelectedCompanySalary] = useState<
     number | string
-  >()
+  >(1)
   const [selectedJob, setSelectedJob] = useState<string>()
   const [selectedCompany, setSelectedCompany] = useState<number | string>()
 
