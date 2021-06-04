@@ -16,7 +16,7 @@ interface Props {
   }
 }
 
-export default class Companies extends Component<Props> {
+export default class CompaniesContent extends Component<Props> {
   render(): React.ReactElement {
     return (
       <>

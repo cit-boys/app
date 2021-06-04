@@ -38,7 +38,7 @@ interface State {
   contributions: PaginatedResponse<Contribution>
 }
 
-export default class DashboardScreen extends Component<Props, State> {
+export default class DashboardContent extends Component<Props, State> {
   state: State = {
     selectedCompanySalary: 1,
     selectedJob: undefined,

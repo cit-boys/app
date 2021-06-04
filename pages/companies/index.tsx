@@ -1,7 +1,9 @@
+import React, { Component } from 'react'
+
 import axios from '@utils/axios'
 import { Company } from '@utils/hooks/useCompanies'
-import React, { Component } from 'react'
-import CompaniesListScreen from '../../screens/CompaniesList'
+
+import CompaniesContent from '../../screens/CompaniesContent'
 
 interface Props {
   children: React.ReactElement
@@ -15,10 +17,7 @@ interface State {
   isLoading
 }
 
-export default class CompaniesListScreenWrapper extends Component<
-  Props,
-  State
-> {
+export default class CompaniesScreen extends Component<Props, State> {
   state: State = {
     companies: {
       popular: [],
@@ -47,6 +46,6 @@ export default class CompaniesListScreenWrapper extends Component<
   render(): React.ReactElement {
     if (this.state.isLoading) return <div>Loading...</div>
 
-    return <CompaniesListScreen companies={this.state.companies} />
+    return <CompaniesContent companies={this.state.companies} />
   }
 }

@@ -1,8 +1,10 @@
+import React, { Component } from 'react'
+import { Router } from 'next/router'
+
 import axios from '@utils/axios'
 import { toTitleCase } from '@utils/helpers'
-import { Router } from 'next/router'
-import React, { Component } from 'react'
-import CompanyDetailScreen from '../../screens/CompanyDetailScreen'
+
+import CompanyDetailContent from '../../screens/CompanyDetailContent'
 
 interface Props {
   router: Router
@@ -17,10 +19,7 @@ interface State {
   companyName: string
 }
 
-export default class CompanyDetailScreenWrapper extends Component<
-  Props,
-  State
-> {
+export default class CompanyDetailScreen extends Component<Props, State> {
   state: State = {
     details: [],
     isLoading: false,
@@ -46,7 +45,7 @@ export default class CompanyDetailScreenWrapper extends Component<
 
   render(): React.ReactElement {
     return (
-      <CompanyDetailScreen
+      <CompanyDetailContent
         companyName={this.state.companyName}
         details={this.state.details}
       />
