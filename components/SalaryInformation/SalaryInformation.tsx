@@ -55,7 +55,12 @@ export default function SalaryInformation(params: Props): React.ReactElement {
                 }}
               />
             ) : null}
-            <Bar label={level.level} key={index} even={!!(index % 2)} />
+            <Bar
+              label={level.level}
+              key={index}
+              even={!!(index % 2)}
+              company={params.company}
+            />
           </div>
         ))}
       </div>
