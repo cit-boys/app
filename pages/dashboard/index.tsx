@@ -14,6 +14,8 @@ import ContributionCard from '@components/ContributionCard'
 import DropdownV2 from '@components/DropdownV2'
 import Header from '@components/Header'
 import SalaryInformation from '@components/SalaryInformation'
+import { Pagination } from '@material-ui/lab'
+import { DEFAULT_PAGE_SIZE } from '@utils/helpers'
 
 import styles from '../styles.module.scss'
 import dashboard from './dashboard.module.scss'
@@ -31,9 +33,14 @@ export default function Directory({
   >(1)
   const [selectedJob, setSelectedJob] = useState<string>()
   const [selectedCompany, setSelectedCompany] = useState<number | string>()
+  const [page, setPage] = useState(1)
 
   const { data: contributions, refetch, isLoading } = useContributions({
-    params: { company: selectedCompany as number, job_title: selectedJob },
+    params: {
+      company: selectedCompany as number,
+      job_title: selectedJob,
+      page,
+    },
   })
 
   useEffect(() => {
@@ -45,19 +52,37 @@ export default function Directory({
     value: index ? item.id : '',
   }))
 
-  const renderContributions = contributions.length ? (
-    contributions.map((item, index) => (
-      <ContributionCard
-        key={index}
-        companyName={item.company_name}
-        yoe={item.years_of_experience}
-        dateContributed={item.datetime_of_contribution}
-        job={item.job_title}
-        salary={item.salary}
+  const renderContributions = contributions.results.length ? (
+    <div className="flex flex-col items-center justify-center gap-y-8 w-full">
+      <div className="w-full flex flex-row justify-between">
+        {contributions.results.map((item, index) => (
+          <ContributionCard
+            key={index}
+            companyName={item.company_name}
+            yoe={item.years_of_experience}
+            dateContributed={item.datetime_of_contribution}
+            job={item.job_title}
+            salary={item.salary}
+          />
+        ))}
+      </div>
+
+      <Pagination
+        count={Math.ceil(contributions.count / DEFAULT_PAGE_SIZE)}
+        onChange={(_, page) => setPage(page)}
       />
-    ))
+    </div>
   ) : (
-    <span>There are currently no contributions.</span>
+    <div className="flex flex-col items-center justify-center gap-y-8 w-full">
+      <ContributionCard
+        companyName="foo"
+        yoe={0}
+        dateContributed={new Date()}
+        job="bar"
+        salary={0}
+      />
+      <Pagination count={Math.ceil(contributions.count / DEFAULT_PAGE_SIZE)} />
+    </div>
   )
 
   return (

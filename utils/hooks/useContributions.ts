@@ -1,10 +1,11 @@
 import { useQuery, UseQueryOptions } from 'react-query'
 import axios from '@utils/axios'
-import { parseDatetime } from '@utils/helpers'
+import { PaginatedResponse, parseDatetime } from '@utils/helpers'
 
 interface Params {
   company?: number
   job_title?: string
+  page?: number
 }
 
 interface Contribution {
@@ -19,26 +20,30 @@ const getContributions = (params: Params = {}) =>
   axios
     .get('api/contributions/', { params })
     .then((res) => res.data)
-    .then((data) =>
-      data.map((item) => ({
+    .then((data) => ({
+      ...data,
+      results: data.results.map((item) => ({
         ...item,
         datetime_of_contribution: parseDatetime(item.datetime_of_contribution),
         salary: parseFloat(item.salary),
-      }))
-    )
+      })),
+    }))
 
 interface Props {
   params?: Params
-  options?: UseQueryOptions<Contribution[]>
+  options?: UseQueryOptions<PaginatedResponse<Contribution>>
 }
 
 // eslint-disable-next-line
-export default function useContributions({ params = {}, options }: Props = {}) {
-  return useQuery<Contribution[]>(
-    'contributions',
+export default function useContributions({
+  params = { page: 1 },
+  options,
+}: Props = {}) {
+  return useQuery<PaginatedResponse<Contribution>>(
+    ['contributions', params.page],
     () => getContributions(params),
     {
-      initialData: [],
+      initialData: { count: 0, next: null, previous: null, results: [] },
       ...options,
     }
   )
