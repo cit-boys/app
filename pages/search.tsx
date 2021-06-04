@@ -1,5 +1,4 @@
 import React, { ChangeEvent, Component } from 'react'
-import { InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 import { styled } from '@stitches/react'
 
@@ -11,25 +10,60 @@ import { Company, getCompanies } from '@utils/hooks/useCompanies'
 interface State {
   search: string
   companiesList: Company[]
+
+  companies: Company[]
+  isLoading: boolean
 }
 
-export default class SearchScreen extends Component<
-  InferGetStaticPropsType<typeof getStaticProps>,
-  State
-> {
-  state: State = { search: '', companiesList: this.props.companies }
+export default class SearchScreen extends Component<any, State> {
+  state: State = {
+    search: '',
+    companiesList: [],
+    companies: [],
+    isLoading: false,
+  }
 
-  setCompaniesList(): void {
+  // eslint-disable-next-line
+  async loadCompanies() {
+    this.setState({ ...this.state, isLoading: true })
+
+    const companies = await getCompanies()
+
     this.setState({
       ...this.state,
-      companiesList: this.props.companies.filter((item) =>
-        item.short_name.toLowerCase().includes(this.state.search)
-      ),
+      companies,
+      companiesList: companies,
+      isLoading: false,
+    })
+  }
+
+  componentDidMount(): void {
+    this.loadCompanies()
+  }
+
+  setCompaniesList(companiesList: Company[]): void {
+    this.setState({
+      ...this.state,
+      companiesList,
     })
   }
 
   setSearch(e: ChangeEvent<HTMLInputElement>): void {
-    this.setState({ ...this.state, search: e.target.value })
+    if (e.target.value === '')
+      this.setState({
+        ...this.state,
+        search: '',
+        companiesList: this.state.companies,
+      })
+    else this.setState({ ...this.state, search: e.target.value })
+  }
+
+  handleOnClickSearch(): void {
+    this.setCompaniesList(
+      this.state.companies.filter((item) =>
+        item.short_name.toLowerCase().includes(this.state.search)
+      )
+    )
   }
 
   render(): React.ReactElement {
@@ -51,7 +85,10 @@ export default class SearchScreen extends Component<
                 value={this.state.search}
                 onChange={(e) => this.setSearch(e)}
               />
-              <Button title="Search" onClick={() => this.setCompaniesList()} />
+              <Button
+                title="Search"
+                onClick={() => this.handleOnClickSearch()}
+              />
             </Box>
             <ContentCard title="Companies">
               <Box className="flex flex-col gap-y-8">
@@ -67,21 +104,6 @@ export default class SearchScreen extends Component<
         </main>
       </>
     )
-  }
-}
-
-// eslint-disable-next-line
-export async function getStaticProps() {
-  try {
-    const companies = await getCompanies()
-
-    return {
-      props: { companies },
-    }
-  } catch (error) {
-    return {
-      props: { companies: [] },
-    }
   }
 }
 

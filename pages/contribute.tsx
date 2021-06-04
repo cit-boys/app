@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 import { Router } from 'next/router'
 import { styled } from '@stitches/react'
@@ -46,7 +45,7 @@ interface State {
 }
 
 export default class ContributeForm extends Component<
-  InferGetStaticPropsType<typeof getStaticProps> & { router: Router },
+  { router: Router },
   State
 > {
   state: State = {
@@ -63,6 +62,32 @@ export default class ContributeForm extends Component<
     isLoading: false,
     companies: [],
     levels: [],
+  }
+
+  componentDidMount(): void {
+    this.loadCompanies()
+    this.loadLevels()
+  }
+
+  // eslint-disable-next-line
+  async loadCompanies() {
+    this.setState({ ...this.state, isLoading: true })
+
+    const companies = await getCompanies()
+    companies.unshift({ id: 0, location: '', name: '', short_name: '' })
+
+    this.setState({ ...this.state, companies, isLoading: false })
+  }
+
+  // eslint-disable-next-line
+  async loadLevels() {
+    this.setState({ ...this.state, isLoading: true })
+
+    const levels = await axios
+      .get<Level[]>('api/levels/')
+      .then((res) => res.data || [])
+
+    this.setState({ ...this.state, levels, isLoading: false })
   }
 
   submitForm(): void {
@@ -112,8 +137,7 @@ export default class ContributeForm extends Component<
     this.setState({ ...this.state, bonus })
   }
 
-  // eslint-disable-next-line
-  mapChoices(item: Level) {
+  mapChoices(item: Level): { label: string; value: number } {
     return { label: item.name, value: item.id }
   }
 
@@ -147,7 +171,7 @@ export default class ContributeForm extends Component<
               >
                 <Box className="grid grid-cols-2 gap-x-16 gap-y-4">
                   <DropdownV2
-                    choices={this.props.companies.map((item, index) => ({
+                    choices={this.state.companies.map((item, index) => ({
                       label: index ? item.short_name : 'All',
                       value: index ? item.id : 0,
                     }))}
@@ -166,12 +190,12 @@ export default class ContributeForm extends Component<
                   <DropdownV2
                     choices={
                       this.state.company_id
-                        ? this.props.levels
+                        ? this.state.levels
                             .filter(
                               (item) => item.company === this.state.company_id
                             )
                             .map(this.mapChoices)
-                        : this.props.levels.map(this.mapChoices)
+                        : this.state.levels.map(this.mapChoices)
                     }
                     value={this.state.level}
                     onChange={(v) => {
@@ -179,7 +203,7 @@ export default class ContributeForm extends Component<
                       // but values.level persists even if the ui looks like it set the field to undefined
                       if (!this.state.company_id)
                         this.setCompanyId(
-                          this.props.levels.find((item) => item.company === v)
+                          this.state.levels.find((item) => item.company === v)
                             .company
                         )
                       this.setLevel(v)
@@ -276,26 +300,6 @@ export default class ContributeForm extends Component<
         </main>
       </>
     )
-  }
-}
-
-// eslint-disable-next-line
-export async function getStaticProps() {
-  try {
-    const companies = await getCompanies()
-    const levels = await axios
-      .get<Level[]>('api/levels/')
-      .then((res) => res.data || [])
-
-    companies.unshift({ id: 0, location: '', name: '', short_name: '' })
-
-    return {
-      props: { companies, levels },
-    }
-  } catch (error) {
-    return {
-      props: { companies: [], levels: [] },
-    }
   }
 }
 
