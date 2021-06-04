@@ -19,7 +19,7 @@ export default class CompaniesListScreenWrapper extends Component<
   Props,
   State
 > {
-  state = {
+  state: State = {
     companies: {
       popular: [],
       unpopular: [],

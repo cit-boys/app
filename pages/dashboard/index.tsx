@@ -19,7 +19,7 @@ interface State {
 }
 
 export default class DashboardScreenWrapper extends Component<Props, State> {
-  state = {
+  state: State = {
     companies: [],
     jobs: [],
     isLoading: false,

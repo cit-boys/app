@@ -5,7 +5,7 @@ import { Router } from 'next/router'
 import { styled } from '@stitches/react'
 
 import axios from '@utils/axios'
-import { getCompanies } from '@utils/hooks/useCompanies'
+import { Company, getCompanies } from '@utils/hooks/useCompanies'
 
 import Header from '@components/Header'
 import ContentCard from '@components/ContentCard'
@@ -39,13 +39,17 @@ interface State {
   yac?: number
   annual_salary?: string
   bonus?: string
+
+  isLoading: boolean
+  companies: Company[]
+  levels: Level[]
 }
 
 export default class ContributeForm extends Component<
   InferGetStaticPropsType<typeof getStaticProps> & { router: Router },
   State
 > {
-  state = {
+  state: State = {
     company_id: undefined,
     level: 0,
     gender: '',
@@ -55,6 +59,10 @@ export default class ContributeForm extends Component<
     yac: undefined,
     annual_salary: '',
     bonus: '',
+
+    isLoading: false,
+    companies: [],
+    levels: [],
   }
 
   submitForm(): void {

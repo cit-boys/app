@@ -17,7 +17,7 @@ export default class SearchScreen extends Component<
   InferGetStaticPropsType<typeof getStaticProps>,
   State
 > {
-  state = { search: '', companiesList: this.props.companies }
+  state: State = { search: '', companiesList: this.props.companies }
 
   setCompaniesList(): void {
     this.setState({

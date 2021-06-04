@@ -21,7 +21,7 @@ export default class CompanyDetailScreenWrapper extends Component<
   Props,
   State
 > {
-  state = {
+  state: State = {
     details: [],
     isLoading: false,
     companyName: toTitleCase(this.props.router.query.company as string),
