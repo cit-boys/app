@@ -165,7 +165,7 @@ export default function Contribute({
                       name="annual_salary"
                       value={values.annual_salary}
                       onChange={handleChange}
-                      placeholder="Annual Salary in PHP"
+                      placeholder="Monthly Salary in PHP"
                     />
                     <DropdownV2
                       choices={[

@@ -2,7 +2,6 @@ import { InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 import Header from '@components/Header'
 import ContentCard from '@components/ContentCard'
-import SearchInput from '@components/SearchInput'
 import { styled } from '@stitches/react'
 
 import styles from '../styles.module.scss'
@@ -68,7 +67,7 @@ export default function Companies({
           className="flex flex-col items-center justify-start overflow-y-auto"
           css={{ padding: '5% 0' }}
         >
-          <ContentCard title="Companies" rightComponent={<SearchInput />}>
+          <ContentCard title="Companies">
             <Box className="flex flex-col gap-y-8">
               <CompaniesList
                 title="Popular Companies"
