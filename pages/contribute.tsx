@@ -46,7 +46,7 @@ export default class ContributeForm extends Component<
   State
 > {
   state = {
-    company_id: 0,
+    company_id: undefined,
     level: 0,
     gender: '',
     highest_academic_level_attained: '',

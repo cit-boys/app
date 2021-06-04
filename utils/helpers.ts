@@ -20,3 +20,6 @@ export interface PaginatedResponse<T> {
   previous: string | null
   results: T[]
 }
+
+export const toTitleCase = (str: string): string =>
+  `${str[0].toUpperCase()}${str.slice(1)}`
