@@ -4,9 +4,7 @@ import { Router } from 'next/router'
 import axios from '@utils/axios'
 import { Company, getCompanies } from '@utils/hooks/useCompanies'
 
-import DashboardScreen from '../../screens/DashboardScreen'
-
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+import DashboardContent from '../../screens/DashboardContent'
 
 interface Props {
   router: Router
@@ -18,7 +16,7 @@ interface State {
   isLoading: boolean
 }
 
-export default class DashboardScreenWrapper extends Component<Props, State> {
+export default class DashboardScreen extends Component<Props, State> {
   state: State = {
     companies: [],
     jobs: [],
@@ -56,7 +54,7 @@ export default class DashboardScreenWrapper extends Component<Props, State> {
     if (this.state.isLoading) return <div>Loading...</div>
 
     return (
-      <DashboardScreen
+      <DashboardContent
         companies={this.state.companies}
         jobs={this.state.jobs}
         router={this.props.router}

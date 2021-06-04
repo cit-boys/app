@@ -21,5 +21,13 @@ export interface PaginatedResponse<T> {
   results: T[]
 }
 
+export interface Contribution {
+  company_name: string
+  years_of_experience: number
+  datetime_of_contribution: Date
+  salary: number
+  job_title: string
+}
+
 export const toTitleCase = (str: string): string =>
   `${str[0].toUpperCase()}${str.slice(1)}`
