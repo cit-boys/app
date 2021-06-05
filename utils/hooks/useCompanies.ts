@@ -17,7 +17,7 @@ interface Props {
 }
 
 // eslint-disable-next-line
-export default function useCompanies({ options }: Props) {
+export default function useCompanies({ options = {} }: Props = {}) {
   return useQuery<Company[]>('contributions', () => getCompanies(), {
     initialData: [],
     ...options,

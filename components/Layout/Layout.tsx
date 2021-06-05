@@ -1,7 +1,6 @@
 import { useRouter } from 'next/dist/client/router'
 import Image from 'next/image'
 import Link from 'next/link'
-import { AiOutlineHome } from 'react-icons/ai'
 import { MdSearch } from 'react-icons/md'
 import { RiDashboardLine } from 'react-icons/ri'
 import { AiOutlineDatabase } from 'react-icons/ai'
@@ -14,10 +13,6 @@ import styles from './styles.module.scss'
 const iconSize = 24
 type NavItemProps = { link: string; icon: React.ReactElement }
 const mainLinks: NavItemProps[] = [
-  {
-    link: '/home',
-    icon: <AiOutlineHome color="white" size={iconSize} />,
-  },
   {
     link: '/dashboard',
     icon: <RiDashboardLine color="white" size={iconSize} />,

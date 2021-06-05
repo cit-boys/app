@@ -6,9 +6,14 @@ import { motion } from 'framer-motion'
 interface Props {
   label: string
   even: boolean
+  company: number
 }
 
-export default function Bar({ label, even }: Props): React.ReactElement {
+export default function Bar({
+  label,
+  even,
+  company,
+}: Props): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -24,7 +29,12 @@ export default function Bar({ label, even }: Props): React.ReactElement {
           />
         </div>
       </div>
-      <SalaryModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <SalaryModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        company={company}
+        level={label}
+      />
     </>
   )
 }
