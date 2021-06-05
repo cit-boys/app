@@ -137,11 +137,9 @@ export default class ContributeForm extends Component<
     this.setState({ ...this.state, bonus })
   }
 
-  mapChoices(item: Level): { label: string; value: number } {
-    return { label: item.name, value: item.id }
-  }
-
   render(): React.ReactElement {
+    const mapChoices = (item: Level) => ({ label: item.name, value: item.id })
+
     return (
       <>
         <Head>
@@ -194,8 +192,8 @@ export default class ContributeForm extends Component<
                             .filter(
                               (item) => item.company === this.state.company_id
                             )
-                            .map(this.mapChoices)
-                        : this.state.levels.map(this.mapChoices)
+                            .map(mapChoices)
+                        : this.state.levels.map(mapChoices)
                     }
                     value={this.state.level}
                     onChange={(v) => {
